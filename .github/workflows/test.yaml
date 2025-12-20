@@ -1,0 +1,19 @@
+name: 'Test'
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+jobs:
+  build:
+    name: 'Test'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: 'Checkout code'
+        uses: 'actions/checkout@v4'
+      - name: 'Setup Bun'
+        uses: 'oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76'
+      - name: 'Install Bun packages'
+        run: 'bun install --frozen-lockfile'
+      - name: 'Run Test'
+        run: 'bun run test'
