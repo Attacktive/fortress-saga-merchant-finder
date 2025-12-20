@@ -1,0 +1,14 @@
+{
+	"name": "fortress-saga-merchant-finder",
+	"app_name": "fortress-saga-merchant-finder",
+	"schedule": "59 2,8,14,20 * * *",
+	"region": "sjc",
+	"command": ["bin/rebuild-cache"],
+	"command_timeout": 300,
+	"enabled": true,
+	"config": {
+		"image": "docker pull ghcr.io/attacktive/fortress-saga-merchant-finder:latest",
+		"guest": { "cpu_kind": "shared", "cpus": 1, "memory_mb": 256 },
+		"restart": { "policy": "no" }
+	}
+}
