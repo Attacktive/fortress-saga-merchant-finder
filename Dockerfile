@@ -1,4 +1,4 @@
-FROM oven/bun:latest
+FROM oven/bun
 
 ARG BUILD_TIME
 ARG GIT_TAG
