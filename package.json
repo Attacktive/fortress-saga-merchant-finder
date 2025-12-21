@@ -11,7 +11,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "bun --env-file=.env.dev --watch src/main.ts",
-		"start": "bun dist/src/main.js",
+		"start": "bun src/main.ts",
 		"lint": "eslint",
 		"type-check": "tsc --noEmit",
 		"test": "vitest"
