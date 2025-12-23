@@ -15,23 +15,6 @@ jobs:
     steps:
       - name: 'Checkout code'
         uses: 'actions/checkout@v4'
-      - name: 'Validate required secrets'
-        run: |
-          set -euo pipefail
-
-          required=(TOKEN CHANNEL_ID APPLICATION_ID)
-          missing=0
-          for key in "${required[@]}"; do
-            if [[ -z "${!key:-}" ]]; then
-              echo "Missing required GitHub Actions secret: ${key}"
-              missing=1
-            fi
-          done
-
-          if [[ "$missing" -ne 0 ]]; then
-            echo "Configure secrets at: Settings -> Secrets and variables -> Actions"
-            exit 1
-          fi
       - name: 'Authenticate to GitHub Packages'
         uses: 'docker/login-action@6d4b68b490aef8836e8fb5e50ee7b3bdfa5894f0'
         with:
