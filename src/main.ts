@@ -1,6 +1,8 @@
 import { useDiscord } from './discord.js';
 import { createServer } from 'http';
 
+const PORT = process.env.PORT || 3000;
+
 const server = createServer((request, response) => {
 	if (request.url === '/') {
 		response.writeHead(200, { 'Content-Type': 'application/json' });
@@ -11,7 +13,14 @@ const server = createServer((request, response) => {
 	}
 });
 
-const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`🏥 Health check server running on port ${PORT}`));
 
-await useDiscord();
+const exitWith = (code: number) => server.close(() => process.exit(code));
+
+try {
+	await useDiscord();
+	exitWith(0);
+} catch (error) {
+	console.error(error);
+	exitWith(1);
+}
