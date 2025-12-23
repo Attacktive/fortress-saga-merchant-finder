@@ -5,11 +5,15 @@ export const useDiscord = async () => {
 	const TOKEN = process.env.TOKEN;
 	if (!TOKEN) {
 		throw new Error('The environment variable "TOKEN" is not found in environment variables!');
+	} else if (TOKEN.includes('...')) {
+		throw new Error('You need to provide the environment variable "TOKEN"!');
 	}
 
 	const CHANNEL_ID = process.env.CHANNEL_ID;
 	if (!CHANNEL_ID) {
 		throw new Error('The environment variable "CHANNEL_ID" is not found in environment variables!');
+	} else if (CHANNEL_ID.includes('...')) {
+		throw new Error('You need to provide the environment variable "CHANNEL_ID"!');
 	}
 
 	const client = new Client({ intents: [] });

@@ -1,6 +1,6 @@
 {
 	"name": "fortress-saga-merchant-finder",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"private": true,
 	"author": {
 		"name": "Attacktive",
@@ -11,7 +11,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "bun --env-file=.env.dev --watch src/main.ts",
-		"start": "bun src/main.ts",
+		"start": "NODE_ENV=production bun src/main.ts",
 		"lint": "eslint",
 		"type-check": "tsc --noEmit",
 		"test": "vitest"
