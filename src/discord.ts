@@ -2,6 +2,8 @@ import { Client } from 'discord.js';
 import { getLastCoordinates } from './coordinates.js';
 
 export const useDiscord = async () => {
+	console.log('process.env', process.env);
+
 	const TOKEN = process.env.TOKEN;
 	if (!TOKEN) {
 		throw new Error('The environment variable "TOKEN" is not found in environment variables!');
