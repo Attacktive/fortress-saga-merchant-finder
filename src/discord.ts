@@ -16,8 +16,12 @@ export const useDiscord = async () => {
 		throw new Error('You need to provide the environment variable "CHANNEL_ID"!');
 	}
 
-	let done: () => void;
-	const finished: Promise<void> = new Promise(resolve => { done = resolve; });
+	let succeed: () => void;
+	let fail: (_error: unknown) => void;
+	const finished: Promise<void> = new Promise((resolve, reject) => {
+		succeed = resolve;
+		fail = reject;
+	});
 
 	const client = new Client({ intents: [] });
 
@@ -35,19 +39,21 @@ export const useDiscord = async () => {
 			try {
 				const coordinates = getLastCoordinates();
 				const channel = await client.channels.fetch(CHANNEL_ID);
-				if (!channel) {
-					throw new Error(`Channel not found: ${CHANNEL_ID}`);
+				if (channel) {
+					if (channel.isSendable()) {
+						await channel.send(`\`${coordinates}\``);
+					} else {
+						fail(new Error(`Channel is not sendable: ${CHANNEL_ID}`));
+					}
+				} else {
+					fail(new Error(`Channel not found: ${CHANNEL_ID}`));
 				}
-
-				if (!channel.isSendable()) {
-					throw new Error(`Channel is not sendable: ${CHANNEL_ID}`);
-				}
-
-				await channel.send(`\`${coordinates}\``);
+			} catch (error) {
+				fail(error);
 			} finally {
 				await client.destroy();
 
-				done();
+				succeed();
 			}
 		}
 	);
