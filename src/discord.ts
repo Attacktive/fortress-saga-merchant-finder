@@ -16,6 +16,9 @@ export const useDiscord = async () => {
 		throw new Error('You need to provide the environment variable "CHANNEL_ID"!');
 	}
 
+	let done: () => void;
+	const finished: Promise<void> = new Promise(resolve => { done = resolve; });
+
 	const client = new Client({ intents: [] });
 
 	client.once(
@@ -43,11 +46,15 @@ export const useDiscord = async () => {
 				await channel.send(`\`${coordinates}\``);
 			} finally {
 				await client.destroy();
+
+				done();
 			}
 		}
 	);
 
 	await client.login(TOKEN);
+
+	await finished;
 
 	return client;
 };
