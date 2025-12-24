@@ -1,4 +1,4 @@
-name: 'Deploy package'
+name: 'Deploy package to GitHub container registry'
 on:
   push:
     tags:
