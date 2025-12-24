@@ -1,0 +1,33 @@
+name: 'Deploy to Fly.io'
+on:
+  workflow_run:
+    workflows: ['Package as a Docker Image']
+    types: ['completed']
+jobs:
+  deploy:
+    name: 'Deploy to Fly.io'
+    runs-on: 'ubuntu-latest'
+    concurrency: 'deploy-group'
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+    steps:
+      - name: 'Checkout repository'
+        uses: 'actions/checkout@v5'
+        with:
+          fetch-depth: 0
+      - id: 'version'
+        name: 'Get version info'
+        run: |
+          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          echo "build_time=$(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_OUTPUT
+          echo "git_tag=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+      - name: 'Setup flyctl'
+        uses: 'superfly/flyctl-actions/setup-flyctl@63da3ecc5e2793b98a3f2519b3d75d4f4c11cec2'
+      - name: 'Set scale count'
+        run: 'flyctl scale count 1 --yes'
+      - name: 'Deploy to Fly.io'
+        run: flyctl deploy --image ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} --ha=false
+        env:
+          BUILD_TIME: ${{ steps.version.outputs.build_time }}
+          GIT_TAG: ${{ steps.version.outputs.git_tag }}
