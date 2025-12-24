@@ -2,7 +2,7 @@ import { once } from 'node:events';
 import { Client } from 'discord.js';
 import { getLastCoordinates } from './coordinates.js';
 
-export const useDiscord = async () => {
+const predictCoordinates = async () => {
 	const token = process.env.TOKEN;
 	const channelId = process.env.CHANNEL_ID;
 
@@ -42,6 +42,6 @@ export const useDiscord = async () => {
 	} finally {
 		await client.destroy();
 	}
-
-	return client;
 };
+
+export { predictCoordinates };

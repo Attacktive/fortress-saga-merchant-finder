@@ -1,7 +1,7 @@
-import { useDiscord } from './discord.js';
+import { predictCoordinates } from './discord.js';
 
 try {
-	await useDiscord();
+	await predictCoordinates();
 } catch (error) {
 	console.error(error);
 	process.exitCode = 1;
