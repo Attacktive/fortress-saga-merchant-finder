@@ -32,7 +32,7 @@ jobs:
       - name: 'Set scale count'
         run: 'flyctl scale count 1 --yes'
       - name: 'Deploy to Fly.io'
-        run: flyctl deploy --image ${{ steps.image-name-normalization.repository }}:${{ steps.version.outputs.version }} --ha=false
+        run: flyctl deploy --image ${{ steps.image-name-normalization.outputs.repository }}:${{ steps.version.outputs.version }} --ha=false
         env:
           BUILD_TIME: ${{ steps.version.outputs.build_time }}
           GIT_TAG: ${{ steps.version.outputs.git_tag }}
