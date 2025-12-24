@@ -2,15 +2,17 @@ import { once } from 'node:events';
 import { Client } from 'discord.js';
 import { getLastCoordinates } from './coordinates.js';
 
+const isConfigured = (value: string | undefined): value is string => (typeof value === 'string') && !value.includes('FIXME');
+
 const predictCoordinates = async () => {
 	const token = process.env.TOKEN;
 	const channelId = process.env.CHANNEL_ID;
 
-	if (!token || token.includes('...')) {
+	if (!isConfigured(token)) {
 		throw new Error('You need to provide the environment variable "TOKEN"!');
 	}
 
-	if (!channelId || channelId.includes('...')) {
+	if (!isConfigured(channelId)) {
 		throw new Error('You need to provide the environment variable "CHANNEL_ID"!');
 	}
 
