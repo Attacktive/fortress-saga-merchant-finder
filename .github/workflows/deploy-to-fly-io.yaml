@@ -10,12 +10,17 @@ jobs:
     concurrency: 'deploy-group'
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
+      CONTAINER_REGISTRY: ghcr.io/${{ github.repository }}
       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
     steps:
       - name: 'Checkout repository'
         uses: 'actions/checkout@v5'
         with:
           fetch-depth: 0
+      - id: 'image-name-normalization'
+        name: 'Normalize image name'
+        run: |
+          echo "repository=$(echo "$CONTAINER_REGISTRY" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
       - id: 'version'
         name: 'Get version info'
         run: |
@@ -27,7 +32,7 @@ jobs:
       - name: 'Set scale count'
         run: 'flyctl scale count 1 --yes'
       - name: 'Deploy to Fly.io'
-        run: flyctl deploy --image ghcr.io/${{ github.repository }}:${{ steps.version.outputs.version }} --ha=false
+        run: flyctl deploy --image ${{ steps.image-name-normalization.repository }}:${{ steps.version.outputs.version }} --ha=false
         env:
           BUILD_TIME: ${{ steps.version.outputs.build_time }}
           GIT_TAG: ${{ steps.version.outputs.git_tag }}
