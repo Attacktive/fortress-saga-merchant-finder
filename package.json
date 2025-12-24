@@ -10,7 +10,7 @@
 	"license": "MIT",
 	"type": "module",
 	"scripts": {
-		"dev": "bun --watch src/main.ts",
+		"dev": "bun src/main.ts",
 		"start": "NODE_ENV=production bun src/main.ts",
 		"lint": "eslint",
 		"type-check": "tsc --noEmit",
